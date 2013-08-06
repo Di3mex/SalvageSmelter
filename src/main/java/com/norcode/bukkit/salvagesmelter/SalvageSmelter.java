@@ -43,12 +43,14 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
     private boolean alwaysYieldFullAmt = false;
     private boolean requireSigns;
 
+
     @Override
     public void onEnable() {
         saveDefaultConfig();
         loadConfig();
         getServer().getPluginManager().registerEvents(this, this);
     }
+
 
     public void doUpdater() {
         String autoUpdate = getConfig().getString("auto-update", "notify-only").toLowerCase();
@@ -60,6 +62,7 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
             updater = new Updater(this, "salvagesmelter", this.getFile(), UpdateType.NO_DOWNLOAD, true);
         }
     }
+
 
     public ItemStack parseResultStack(String s) {
         String[] parts = s.split(":");
@@ -78,6 +81,7 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
         }
         return new ItemStack(mat, qty, data);
     }
+
 
     @EventHandler(ignoreCancelled=true)
     public void onPlayerLogin(PlayerLoginEvent event) {
@@ -106,6 +110,7 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
             }, 20);
         }
     }
+
 
     public void loadConfig() {
         if (!getConfig().contains("auto-update")) {
@@ -159,6 +164,7 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
         doUpdater();
     }
 
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length > 0) {
@@ -176,6 +182,7 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
         return false;
     }
 
+
     @EventHandler(ignoreCancelled=true)
     public void onInventoryMoveItem(InventoryMoveItemEvent event) {
         if (event.getDestination().getHolder() instanceof Furnace) {
@@ -189,12 +196,13 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
         }
     }
 
+
     /**
      * Check if the server is currently Running DiabloDrops
-     *
-     * DiabloDrops (http://dev.bukkit.org/bukkit-plugins/diablodrops/) does strange
-     * things with the FurnaceBurnEvent which prevent SalvageSmelter from doing it's
-     * business without the strange work-around seen in onEarlyBurn and onLateBurn
+     * <p/>
+     * DiabloDrops (http://dev.bukkit.org/bukkit-plugins/diablodrops/) does strange things with
+     * the FurnaceBurnEvent which prevent SalvageSmelter from doing it's business without
+     * the strange work-around seen in onEarlyBurn and onLateBurn
      *
      * @return true if DiabloDrops is installed, false otherwise.
      */
@@ -209,6 +217,7 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
             burnTimes.put(event, event.getBurnTime());
         }
     }
+
 
     @EventHandler(ignoreCancelled=false, priority=EventPriority.HIGHEST)
     public void onLateBurn(FurnaceBurnEvent event) {
@@ -225,6 +234,8 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
             }
         }
     }
+
+
     @EventHandler(ignoreCancelled=true, priority=EventPriority.HIGH)
     public void onSmelt(FurnaceSmeltEvent event) {
         ItemStack orig = event.getSource();
@@ -249,6 +260,7 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
             event.setResult(result);
         }
     }
+
 
     @EventHandler(ignoreCancelled=true)
     public void onInventoryClick(InventoryClickEvent event) {
@@ -298,10 +310,12 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
 
     }
 
+
     /**
      * Check if SalvageSmelter is enabled in this world.
      *
      * @param world the world to check.
+     *
      * @return true if SalvageSmelter is enabled in this world, false otherwise.
      */
     public boolean enabledInWorld(World world) {
@@ -309,6 +323,7 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
                 (!worldWhitelist && !worldList.contains(world.getName().toLowerCase())));
         return enabled;
     }
+
 
     /**
      * Can a material be inserted into a furnace
@@ -332,6 +347,7 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
             return !recipeMap.containsKey(item);
         }
     }
+
 
     /**
      * Check if the given block is a SalvageSmelter.
@@ -360,6 +376,7 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
         return false;
     }
 
+
     @EventHandler(ignoreCancelled=true)
     private void onSignChange(SignChangeEvent event) {
         if (event.getLine(0).equalsIgnoreCase("[SALVAGE]")) {
@@ -369,12 +386,14 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
         }
     }
 
+
     /**
      * Calculate the results of a salvage.
      *
-     * @param originalMaterial - The material placed in the top furnace slot.
-     * @param rawMaterial - the material of the result of the smelting event
-     * @param damagePct - the percentage of damage done to the item.
+     * @param originalMaterial The material placed in the top furnace slot.
+     * @param rawMaterial      the material of the result of the smelting event
+     * @param damagePct        the percentage of damage done to the item.
+     *
      * @return the exact results of smelting originalMaterial into rawMaterial
      */
     public ItemStack getSalvage(Material originalMaterial, Material rawMaterial , double damagePct) {
@@ -397,6 +416,7 @@ public class SalvageSmelter extends JavaPlugin implements Listener {
         }
         return null;
     }
+
 
     public void debug(String s) {
         if (debugMode) {
